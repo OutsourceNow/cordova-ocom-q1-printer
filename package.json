@@ -1,0 +1,17 @@
+{
+  "name": "com.ocom.printer",
+  "version": "0.0.1",
+  "description": "Plugin for the aidl print service on the OCOM mobile POS Devices",
+  "cordova": {
+    "id": "com.ocom.printer",
+    "platforms": [
+      "android"
+    ]
+  },
+  "keywords": [
+    "ecosystem:cordova",
+    "cordova-android"
+  ],
+  "author": "Mukopaje Singogo",
+  "license": "ISC"
+}

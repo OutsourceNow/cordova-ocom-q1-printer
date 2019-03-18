@@ -1,0 +1,49 @@
+<?xml version='1.0' encoding='utf-8'?>
+<plugin id="com.ocom.printer" version="0.0.1" xmlns="http://apache.org/cordova/ns/plugins/1.0"
+ xmlns:android="http://schemas.android.com/apk/res/android">
+ <name>IPosPrinterTestDemo</name>
+  <engines>
+    <engine name="cordova" version=">=3.0.0"/>
+  </engines>
+ <js-module name="OcomPOSPD" src="www/OcomPOSPD.js">
+ <clobbers target="iPosPrinterTestDemo" />
+ </js-module>
+ 
+ <platform name="android">
+ <config-file parent="/*" target="res/xml/config.xml">
+ <feature name="IPosPrinterTestDemo">
+ <param name="android-package" value="com.iposprinter.printertestdemo.IPosPrinterTestDemo" />
+  <param name="onload" value="true" />
+ </feature>
+ </config-file>
+ <config-file target="AndroidManifest.xml" parent="/manifest/application">
+      <receiver android:name="android.com.iposprinter.printertestdemo.PrinterStatusReceiver" android:enabled="true">
+        <intent-filter android:priority="1000">
+          <action android:name="com.iposprinter.iposprinterservice.aidl.OUT_OF_PAPER_ACTION" />
+          <action android:name="com.iposprinter.iposprinterservice.aidl.ERROR_ACTION" />
+          <action android:name="com.iposprinter.iposprinterservice.aidl.NORMAL_ACTION" />
+          <action android:name="com.iposprinter.iposprinterservice.aidl.COVER_OPEN_ACTION" />
+          <action android:name="com.iposprinter.iposprinterservice.aidl.COVER_ERROR_ACTION" />
+          <action android:name="com.iposprinter.iposprinterservice.aidl.KNIFE_ERROR_ACTION_1" />
+          <action android:name="com.iposprinter.iposprinterservice.aidl.KNIFE_ERROR_ACTION_2" />
+          <action android:name="com.iposprinter.iposprinterservice.aidl.OVER_HEATING_ACITON" />
+          <action android:name="com.iposprinter.iposprinterservice.aidl.FIRMWARE_UPDATING_ACITON" />
+        </intent-filter>
+      </receiver>
+      <service android:name="com.iposprinter.iposprinterservice.aidl.IPosPrinterService">
+        <intent-filter>
+          <action android:name="com.iposprinter.iposprinterservice.aidl.IPosPrinterService" />
+        </intent-filter>
+      </service>
+    </config-file>
+ 
+ <source-file src="src/android/com/iposprinter/printertestdemo/IPosPrinterTestDemo.java" target-dir="src/com/iposprinter/printertestdemo/" />
+ <source-file src="src/android/com/iposprinter/printertestdemo/PrinterStatusReceiver.java" target-dir="src/android/com/iposprinter/printertestdemo/" />
+<source-file src="src/android/com/iposprinter/printertestdemo/Utils/BitmapUtils.java" target-dir="src/com/iposprinter/printertestdemo/Utils/" />
+ <source-file src="src/android/com/iposprinter/printertestdemo/ThreadPoolManager.java" target-dir="src/com/iposprinter/printertestdemo/" />
+ <source-file src="src/android/com/iposprinter/trans/TransBean.java" target-dir="src/android/com/iposprinter/trans/"/>
+<source-file src="src/android/com/iposprinter/trans/TransBean.aidl" target-dir="src/android/com/iposprinter/trans/"/>
+ <source-file src="src/android/com/iposprinter/iposprinterservice/aidl/IPosPrinterService.aidl" target-dir="src/com/iposprinter/iposprinterservice/aidl/" />
+ <source-file src="src/android/com/iposprinter/iposprinterservice/aidl/IPosPrinterCallback.aidl" target-dir="src/com/iposprinter/iposprinterservice/aidl/" />
+ </platform>
+ </plugin>
