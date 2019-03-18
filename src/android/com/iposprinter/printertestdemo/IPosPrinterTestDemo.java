@@ -5,12 +5,11 @@ import org.apache.cordova.CallbackContext;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-
 import org.apache.cordova.CordovaInterface;
 import org.apache.cordova.CordovaWebView;
-
-import com.iposprinter.iposprinterservice.aidl.IPosPrinterCallback;
-import com.iposprinter.iposprinterservice.aidl.IPosPrinterService;
+import android.widget.Toast;
+import com.iposprinter.iposprinterservice.IPosPrinterCallback;
+import com.iposprinter.iposprinterservice.IPosPrinterService;
 
 import android.content.Context;
 import android.content.Intent;
@@ -27,7 +26,7 @@ import android.util.Log;
 
 import com.iposprinter.printertestdemo.Utils.BitmapUtils;
 import com.iposprinter.printertestdemo.ThreadPoolManager;
-import android.com.iposprinter.printertestdemo.PrinterStatusReceiver;
+import com.iposprinter.printertestdemo.PrinterStatusReceiver;
 
 
 public class IPosPrinterTestDemo extends CordovaPlugin {
@@ -65,15 +64,15 @@ public class IPosPrinterTestDemo extends CordovaPlugin {
     private int printerStatus = 0;
 
     /* 定义状态广播 */
-    private final String PRINTER_NORMAL_ACTION = "com.iposprinter.iposprinterservice.aidl.NORMAL_ACTION";
-    private final String PRINTER_PAPERLESS_ACTION = "com.iposprinter.iposprinterservice.aidl.PAPERLESS_ACTION";
-    private final String PRINTER_PAPEREXISTS_ACTION = "com.iposprinter.iposprinterservice.aidl.PAPEREXISTS_ACTION";
-    private final String PRINTER_THP_HIGHTEMP_ACTION = "com.iposprinter.iposprinterservice.aidl.THP_HIGHTEMP_ACTION";
-    private final String PRINTER_THP_NORMALTEMP_ACTION = "com.iposprinter.iposprinterservice.aidl.THP_NORMALTEMP_ACTION";
-    private final String PRINTER_MOTOR_HIGHTEMP_ACTION = "com.iposprinter.iposprinterservice.aidl.MOTOR_HIGHTEMP_ACTION";
-    private final String PRINTER_BUSY_ACTION = "com.iposprinter.iposprinterservice.aidl.BUSY_ACTION";
-    private final String PRINTER_CURRENT_TASK_PRINT_COMPLETE_ACTION = "com.iposprinter.iposprinterservice.aidl.CURRENT_TASK_PRINT_COMPLETE_ACTION";
-    private final String GET_CUST_PRINTAPP_PACKAGENAME_ACTION = "android.print.action.CUST_PRINTAPP_PACKAGENAME";
+    private final String PRINTER_NORMAL_ACTION = "com.iposprinter.iposprinterservice.NORMAL_ACTION";
+    private final String PRINTER_PAPERLESS_ACTION = "com.iposprinter.iposprinterservice.PAPERLESS_ACTION";
+    private final String PRINTER_PAPEREXISTS_ACTION = "com.iposprinter.iposprinterservice.PAPEREXISTS_ACTION";
+    private final String PRINTER_THP_HIGHTEMP_ACTION = "com.iposprinter.iposprinterservice.THP_HIGHTEMP_ACTION";
+    private final String PRINTER_THP_NORMALTEMP_ACTION = "com.iposprinter.iposprinterservice.THP_NORMALTEMP_ACTION";
+    private final String PRINTER_MOTOR_HIGHTEMP_ACTION = "com.iposprinter.iposprinterservice.MOTOR_HIGHTEMP_ACTION";
+    private final String PRINTER_BUSY_ACTION = "com.iposprinter.iposprinterservice.BUSY_ACTION";
+    private final String PRINTER_CURRENT_TASK_PRINT_COMPLETE_ACTION = "com.iposprinter.iposprinterservice.CURRENT_TASK_PRINT_COMPLETE_ACTION";
+    // private final String GET_CUST_PRINTAPP_PACKAGENAME_ACTION = "android.print.action.CUST_PRINTAPP_PACKAGENAME";
 
     /* 定义消息 */
     private final int MSG_TEST = 1;
@@ -89,15 +88,16 @@ public class IPosPrinterTestDemo extends CordovaPlugin {
 
     @Override
     public void initialize(CordovaInterface cordova, CordovaWebView webView) {
+        Log.d(TAG, "Initialization Statrted");
         super.initialize(cordova, webView);
-
+        
         Context applicationContext = this.cordova.getActivity().getApplicationContext();
 
         bitMapUtils = new BitmapUtils(applicationContext);
 
         Intent intent = new Intent();
-        intent.setPackage("android.com.iposprinter.iposprinterservice.aidl");
-        intent.setAction("android.com.iposprinter.iposprinterservice.aidl.IPosPrinterService");
+        intent.setPackage("com.iposprinter.iposprinterservice");
+        intent.setAction("com.iposprinter.iposprinterservice.IPosPrinterService");
 
         applicationContext.startService(intent);
         applicationContext.bindService(intent, connService, Context.BIND_AUTO_CREATE);
@@ -114,6 +114,9 @@ public class IPosPrinterTestDemo extends CordovaPlugin {
         mFilter.addAction(GET_CUST_PRINTAPP_PACKAGENAME_ACTION);
 
         applicationContext.registerReceiver(printerStatusReceiver, mFilter);
+
+        // webView.loadUrl("javascript:console.log('Initialization complete!!');");
+        
     }
 
     @Override
@@ -144,9 +147,9 @@ public class IPosPrinterTestDemo extends CordovaPlugin {
         } else if (action.equals("printColumnsText")) {
             printColumnsText(data.getJSONArray(0), data.getJSONArray(1), data.getJSONArray(2), callbackContext);
             return true;
-        // } else if (action.equals("printBitmap")) {
-        //     printBitmap(data.getString(0), data.getInt(1), data.getInt(2), callbackContext);
-        //     return true;
+        } else if (action.equals("show")) {
+            show(data.getString(0), callbackContext);
+            return true;
         } else if (action.equals("printBarCode")) {
             printBarCode(data.getString(0), data.getInt(1), data.getInt(2), data.getInt(1), data.getInt(2),
                     callbackContext);
@@ -169,6 +172,15 @@ public class IPosPrinterTestDemo extends CordovaPlugin {
         }
 
         return false;
+    }
+
+    private void show(String msg, CallbackContext callbackContext) {
+        if (msg == null || msg.length() == 0) {
+            callbackContext.error("Empty message!");
+        } else {
+            Toast.makeText(webView.getContext(), msg, Toast.LENGTH_LONG).show();
+            callbackContext.success(msg);
+        }
     }
 
     public void printerInit(final CallbackContext callbackContext) {

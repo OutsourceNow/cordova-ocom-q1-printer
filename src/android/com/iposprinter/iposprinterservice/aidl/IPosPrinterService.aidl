@@ -4,10 +4,10 @@
 * AIDL Version：1.0.0
 */
 
-package com.iposprinter.iposprinterservice.aidl;
-import  com.iposprinter.iposprinterservice.aidl.IPosPrinterCallback;
+package com.iposprinter.iposprinterservice;
+import  com.iposprinter.iposprinterservice.IPosPrinterCallback;
 import  android.graphics.Bitmap;
-import  android.com.iposprinter.trans.TransBean;
+
 
 interface IPosPrinterService {
     /**

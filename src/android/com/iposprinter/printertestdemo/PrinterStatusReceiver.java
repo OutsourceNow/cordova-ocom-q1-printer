@@ -1,4 +1,4 @@
-package android.com.iposprinter.printertestdemo;
+package com.iposprinter.printertestdemo;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.PluginResult;

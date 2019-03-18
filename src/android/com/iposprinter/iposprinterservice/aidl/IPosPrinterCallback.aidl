@@ -3,7 +3,7 @@
 * IPosPrinterCallback.aidl
 * AIDL Version：1.0.0
 */
-package com.iposprinter.iposprinterservice.aidl;
+package com.iposprinter.iposprinterservice;
 
 /**
  * 打印服务执行结果的回调
